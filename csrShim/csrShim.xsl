@@ -58,11 +58,17 @@
       				</xsl:for-each>
       				}<xsl:if test="position() != last()">,</xsl:if>
       			</xsl:for-each>
-      			]
+      			],
+      			FirstRow:<xsl:value-of select="$Rows[1]/@ID"/>,
+      			LastRow:<xsl:value-of select="$Rows[position()=last()]/@ID"/>
        		};
       		ctx.ListSchema = {
       			IsDocLib: <xsl:choose><xsl:when test="$IsDocLib">"true"</xsl:when><xsl:otherwise>""</xsl:otherwise></xsl:choose>,
-      			Field:[]
+      			Field:[
+      			<xsl:for-each select="$Rows[1]/@*">
+      				{Name:"<xsl:value-of select="name()"/>"}<xsl:if test="position() != last()">,</xsl:if>
+  				</xsl:for-each>
+      			]
       		}
       		ctx.BasePermissions = {};
       		
