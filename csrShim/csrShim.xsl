@@ -15,6 +15,7 @@
 
 	<xsl:param name="IsDocLib" select="false()"/>
 	<xsl:param name="View" select="' '"/>
+	<xsl:param name="JSLink" />
 
   <xsl:output method="html" indent="no"/>
 
@@ -27,6 +28,14 @@
       </div>
       <div id="scriptPagingCSRS">
       </div>
+      <xsl:if test="boolean($JSLink)">
+      	Orig: <xsl:value-of select="$JSLink"/>
+      	<br />
+      	<xsl:call-template name="jsLinks">
+      		<xsl:with-param name="linkString" select="$JSLink"/>
+      	</xsl:call-template>
+      </xsl:if>
+      
       
       <script type="text/javascript" src="/intranet/hr/documents/csrsample.js"></script>
       
@@ -75,13 +84,41 @@
       		window['ctx'+wpq] = ctx;
       		
       		SP.SOD.executeFunc('clienttemplates.js','RenderListView',function(){
-				console.log('got it!!!');
 				window['ctx'+wpq].bInitialRender = true;
 				RenderListView(window['ctx'+wpq], 'CSRS'+wpq);
 				window['ctx'+wpq].bInitialRender = false;
 			});
       	})();
       </script>
+  </xsl:template>
+  
+  <xsl:template name="jsLinks">
+  	<xsl:param name="linkString" select="."/>
+  	<xsl:param name="splitChar" select="'|'"/>
+  	
+  	<xsl:if test="string-length($linkString)">
+  		<xsl:variable name="linkText" select="substring-before(concat($linkString,$splitChar),$splitChar)"/>
+  		<xsl:value-of select="$linkText"/>
+  		<br />
+  		<xsl:variable name="linkSOD" select="substring($linkText,string-length($linkText) - 2)='(d)'"/>
+  		<xsl:variable name="linkURL">
+  			<xsl:choose>
+  				<xsl:when test="$linkSOD">
+  					<xsl:value-of select="substring($linkText,0,string-length($linkText)-2)"/>
+  				</xsl:when>
+  				<xsl:otherwise>
+  					<xsl:value-of select="$linkText"/>
+  				</xsl:otherwise>
+  			</xsl:choose>
+  		</xsl:variable>
+  		<xsl:value-of select="$linkURL"/>
+  		
+  		<br/>
+  		<xsl:call-template name="jsLinks">
+  			<xsl:with-param name="linkString" select="substring-after($linkString,$splitChar)"/>
+  			<xsl:with-param name="splitChar" select="$splitChar"/>
+  		</xsl:call-template>
+  	</xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
