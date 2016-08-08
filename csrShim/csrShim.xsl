@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:x="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://schemas.microsoft.com/sharepoint/dsp"
                 version="1.0"
-                exclude-result-prefixes="xsl msxsl"
+                exclude-result-prefixes="xsl msxsl x d ddwrt asp SharePoint ddwrt2 o __designer"
                 xmlns:ddwrt="http://schemas.microsoft.com/WebParts/v2/DataView/runtime"
                 xmlns:asp="http://schemas.microsoft.com/ASPNET/20"
                 xmlns:__designer="http://schemas.microsoft.com/WebParts/v2/DataView/designer"
@@ -24,20 +24,15 @@
 
   <xsl:template match="/">
     
+
+	  <xsl:call-template name="jsLinks">
+      	<xsl:with-param name="linkString" select="$JSLink"/>
+      </xsl:call-template>
+      	
       <div id="scriptCSRS">
       </div>
       <div id="scriptPagingCSRS">
       </div>
-      <xsl:if test="boolean($JSLink)">
-      	Orig: <xsl:value-of select="$JSLink"/>
-      	<br />
-      	<xsl:call-template name="jsLinks">
-      		<xsl:with-param name="linkString" select="$JSLink"/>
-      	</xsl:call-template>
-      </xsl:if>
-      
-      
-      <script type="text/javascript" src="/intranet/hr/documents/csrsample.js"></script>
       
       <script type="text/javascript">
       	(function(){
@@ -98,8 +93,6 @@
   	
   	<xsl:if test="string-length($linkString)">
   		<xsl:variable name="linkText" select="substring-before(concat($linkString,$splitChar),$splitChar)"/>
-  		<xsl:value-of select="$linkText"/>
-  		<br />
   		<xsl:variable name="linkSOD" select="substring($linkText,string-length($linkText) - 2)='(d)'"/>
   		<xsl:variable name="linkURL">
   			<xsl:choose>
@@ -111,9 +104,18 @@
   				</xsl:otherwise>
   			</xsl:choose>
   		</xsl:variable>
-  		<xsl:value-of select="$linkURL"/>
   		
-  		<br/>
+  		<xsl:choose>
+  			<xsl:when test="$linkSOD">
+  				<script type="text/javascript">
+  					RegisterSod("<xsl:value-of select="$linkURL"/>","<xsl:value-of select="$linkURL"/>");
+  				</script>
+  			</xsl:when>
+  			<xsl:otherwise>
+  				<script type="text/javascript" src="{$linkURL}"></script>
+  			</xsl:otherwise>
+  		</xsl:choose>
+  		
   		<xsl:call-template name="jsLinks">
   			<xsl:with-param name="linkString" select="substring-after($linkString,$splitChar)"/>
   			<xsl:with-param name="splitChar" select="$splitChar"/>
