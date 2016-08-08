@@ -15,6 +15,9 @@
 
 	<xsl:param name="IsDocLib" select="false()"/>
 	<xsl:param name="View" select="' '"/>
+	
+	<xsl:param name="BaseViewID" select="1"/>
+	<xsl:param name="ListTemplateType" select="100"/>
 	<xsl:param name="JSLink" />
 
   <xsl:output method="html" indent="no"/>
@@ -52,6 +55,8 @@
       		ctx.Templates = {};
       		ctx.IsDocLib = <xsl:value-of select="$IsDocLib"/>;
       		ctx.view = "<xsl:value-of select="$View"/>";
+      		ctx.BaseViewID = <xsl:value-of select="$BaseViewID"/>;
+      		ctx.ListTemplateType = <xsl:value-of select="$ListTemplateType"/>;
       		ctx.ListData = {
       			Row: [
       			<xsl:for-each select="$Rows">
