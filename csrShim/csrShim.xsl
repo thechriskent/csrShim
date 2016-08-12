@@ -19,6 +19,7 @@
 	<xsl:param name="BaseViewID" select="1"/>
 	<xsl:param name="ListTemplateType" select="100"/>
 	<xsl:param name="JSLink" />
+	<xsl:param name="FieldMapping" select="''"/>
 
   <xsl:output method="html" indent="no"/>
 
@@ -37,7 +38,8 @@
       <div id="scriptPagingCSRS">
       </div>
       <xmp><xsl:copy-of select="/dsQueryResponse"/></xmp>
-      
+      <xsl:value-of select="$FieldMapping"/>
+            
       <script type="text/javascript">
       	(function(){
       		var wpq = 500;
@@ -63,7 +65,7 @@
       			<xsl:for-each select="$Rows">
       				{
       				<xsl:for-each select="./@*">
-      					<xsl:value-of select="name()"/>:"<xsl:call-template name="string-replace-all"><xsl:with-param name="text" select="."/><xsl:with-param name="replace" select="'&quot;'"/><xsl:with-param name="by" select="'\&quot;'"/></xsl:call-template>"
+      					<xsl:value-of select="name()"/>:<xsl:call-template name="buildJSValue"><xsl:with-param name="fieldName" select="name()"/><xsl:with-param name="rawValue" select="."/></xsl:call-template>
       					<xsl:if test="position() != last()">,</xsl:if>
       				</xsl:for-each>
       				}<xsl:if test="position() != last()">,</xsl:if>
@@ -148,6 +150,71 @@
         <xsl:value-of select="$text" />
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="buildJSValue">
+  	<xsl:param name="rawValue" select="."/>
+  	<xsl:param name="fieldName"/>
+  	<xsl:param name="mapping" select="$FieldMapping"/>
+  	
+  	<xsl:variable name="valueType">
+  		<xsl:choose>
+  			<xsl:when test="contains($mapping,concat($fieldName,','))">
+  				<xsl:variable name="rawType" select="substring-before(substring-after($mapping,concat($fieldName,',')),';')"/>
+  				<xsl:choose>
+  					<xsl:when test="$rawType='Number'">
+  						<xsl:value-of select="$rawType"/>
+  					</xsl:when>
+  					<xsl:when test="$rawType='Currency'">
+  						<xsl:value-of select="'Number'"/>
+  					</xsl:when>
+  					<xsl:when test="$rawType='Integer'">
+  						<xsl:value-of select="'Number'"/>
+  					</xsl:when>
+  					<xsl:when test="$rawType='Boolean'">
+  						<xsl:value-of select="$rawType"/>
+  					</xsl:when>
+  					<xsl:when test="$rawType='DateTime'">
+  						<xsl:value-of select="$rawType"/>
+  					</xsl:when>
+  					<xsl:when test="$rawType='Lookup'">
+  						<xsl:value-of select="$rawType"/>
+  					</xsl:when>
+  					<xsl:when test="$rawType='URL'">
+  						<xsl:value-of select="$rawType"/>
+  					</xsl:when>
+  					<xsl:when test="$rawType='Counter'">
+  						<xsl:value-of select="'Number'"/>
+  					</xsl:when>
+  					<xsl:when test="$rawType='User'">
+  						<xsl:value-of select="$rawType"/>
+  					</xsl:when>
+  					<xsl:otherwise>
+  						<xsl:value-of select="'Text'"/>
+  					</xsl:otherwise>
+  				</xsl:choose>
+  			</xsl:when>
+  			<xsl:otherwise>
+  				<xsl:value-of select="'Text'"/>
+  			</xsl:otherwise>
+  		</xsl:choose>
+  	</xsl:variable>
+  	
+  	<xsl:choose>
+  		<xsl:when test="$valueType='Boolean'">
+  			<xsl:choose>
+  				<xsl:when test="$rawValue='True'">
+  					<xsl:value-of select="'true'"/>
+  				</xsl:when>
+  				<xsl:otherwise>
+  					<xsl:value-of select="'false'"/>
+  				</xsl:otherwise>
+  			</xsl:choose>
+  		</xsl:when>
+  		<xsl:otherwise>
+  			"<xsl:call-template name="string-replace-all"><xsl:with-param name="text" select="."/><xsl:with-param name="replace" select="'&quot;'"/><xsl:with-param name="by" select="'\&quot;'"/></xsl:call-template>"
+  		</xsl:otherwise>
+  	</xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>
