@@ -63,7 +63,7 @@
       			<xsl:for-each select="$Rows">
       				{
       				<xsl:for-each select="./@*">
-      					<xsl:value-of select="name()"/>:"<xsl:value-of select="."/>"
+      					<xsl:value-of select="name()"/>:'<xsl:value-of select="."/>'
       					<xsl:if test="position() != last()">,</xsl:if>
       				</xsl:for-each>
       				}<xsl:if test="position() != last()">,</xsl:if>
