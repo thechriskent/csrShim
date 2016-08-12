@@ -216,6 +216,11 @@
   				<xsl:with-param name="rawValue" select="$rawValue"/>
   			</xsl:call-template>
   		</xsl:when>
+  		<xsl:when test="$valueType='DateTime'">
+  			<xsl:call-template name="jsValueDateTime">
+  				<xsl:with-param name="rawValue" select="$rawValue"/>
+  			</xsl:call-template>
+  		</xsl:when>
   		<xsl:otherwise>
   			<xsl:call-template name="jsValueText">
   				<xsl:with-param name="rawValue" select="$rawValue"/>
@@ -266,7 +271,13 @@
   	<xsl:value-of select="$rawValue"/>
   </xsl:template>
 
-
+  <xsl:template name="jsValueDateTime">
+  	<xsl:param name="rawValue" select="."/>
+  	Date.parse(
+  		<xsl:call-template name="jsValueText">
+	  		<xsl:with-param name="rawValue" select="$rawValue"/>
+	  	</xsl:call-template>)
+  </xsl:template>
   
 
 </xsl:stylesheet>
