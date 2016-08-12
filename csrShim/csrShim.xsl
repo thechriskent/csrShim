@@ -211,6 +211,11 @@
   				<xsl:with-param name="rawValue" select="$rawValue"/>
   			</xsl:call-template>
   		</xsl:when>
+  		<xsl:when test="$valueType='Number'">
+  			<xsl:call-template name="jsValueNumber">
+  				<xsl:with-param name="rawValue" select="$rawValue"/>
+  			</xsl:call-template>
+  		</xsl:when>
   		<xsl:otherwise>
   			<xsl:call-template name="jsValueText">
   				<xsl:with-param name="rawValue" select="$rawValue"/>
@@ -255,6 +260,12 @@
 		</xsl:otherwise>
 	</xsl:choose>}
   </xsl:template>
+  
+  <xsl:template name="jsValueNumber">
+  	<xsl:param name="rawValue" select="."/>
+  	<xsl:value-of select="$rawValue"/>
+  </xsl:template>
+
 
   
 
