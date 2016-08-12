@@ -202,19 +202,60 @@
   	
   	<xsl:choose>
   		<xsl:when test="$valueType='Boolean'">
-  			<xsl:choose>
-  				<xsl:when test="$rawValue='True'">
-  					<xsl:value-of select="'true'"/>
-  				</xsl:when>
-  				<xsl:otherwise>
-  					<xsl:value-of select="'false'"/>
-  				</xsl:otherwise>
-  			</xsl:choose>
+  			<xsl:call-template name="jsValueBoolean">
+  				<xsl:with-param name="rawValue" select="$rawValue"/>
+  			</xsl:call-template>
+  		</xsl:when>
+  		<xsl:when test="$valueType='URL'">
+  			<xsl:call-template name="jsValueURL">
+  				<xsl:with-param name="rawValue" select="$rawValue"/>
+  			</xsl:call-template>
   		</xsl:when>
   		<xsl:otherwise>
-  			"<xsl:call-template name="string-replace-all"><xsl:with-param name="text" select="."/><xsl:with-param name="replace" select="'&quot;'"/><xsl:with-param name="by" select="'\&quot;'"/></xsl:call-template>"
+  			<xsl:call-template name="jsValueText">
+  				<xsl:with-param name="rawValue" select="$rawValue"/>
+  			</xsl:call-template>
   		</xsl:otherwise>
   	</xsl:choose>
   </xsl:template>
+  
+  <xsl:template name="jsValueText">
+  	<xsl:param name="rawValue" select="."/>
+  	"<xsl:call-template name="string-replace-all"><xsl:with-param name="text" select="$rawValue"/><xsl:with-param name="replace" select="'&quot;'"/><xsl:with-param name="by" select="'\&quot;'"/></xsl:call-template>"
+  </xsl:template>
+  
+  <xsl:template name="jsValueBoolean">
+  	<xsl:param name="rawValue" select="."/>
+	<xsl:choose>
+		<xsl:when test="$rawValue='True'">
+			<xsl:value-of select="'true'"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="'false'"/>
+		</xsl:otherwise>
+	</xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="jsValueURL">
+  	<xsl:param name="rawValue" select="."/>
+  	{link:
+  	<xsl:call-template name="jsValueText">
+  		<xsl:with-param name="rawValue" select="substring-before($rawValue,', ')"/>
+  	</xsl:call-template>,text:
+	<xsl:choose>
+		<xsl:when test="contains($rawValue,', ')">
+			<xsl:call-template name="jsValueText">
+		  		<xsl:with-param name="rawValue" select="substring-after($rawValue,', ')"/>
+		  	</xsl:call-template>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:call-template name="jsValueText">
+		  		<xsl:with-param name="rawValue" select="$rawValue"/>
+		  	</xsl:call-template>
+		</xsl:otherwise>
+	</xsl:choose>}
+  </xsl:template>
+
+  
 
 </xsl:stylesheet>
