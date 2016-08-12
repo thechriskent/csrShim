@@ -36,6 +36,7 @@
       </div>
       <div id="scriptPagingCSRS">
       </div>
+      <xmp><xsl:copy-of select="/dsQueryResponse"/></xmp>
       
       <script type="text/javascript">
       	(function(){
@@ -67,9 +68,9 @@
       				</xsl:for-each>
       				}<xsl:if test="position() != last()">,</xsl:if>
       			</xsl:for-each>
-      			],
+      			]<xsl:if test="dvt_RowCount &gt; 0">,
       			FirstRow:<xsl:value-of select="$Rows[1]/@ID"/>,
-      			LastRow:<xsl:value-of select="$Rows[position()=last()]/@ID"/>
+      			LastRow:<xsl:value-of select="$Rows[position()=last()]/@ID"/></xsl:if>
        		};
       		ctx.ListSchema = {
       			IsDocLib: <xsl:choose><xsl:when test="$IsDocLib">"true"</xsl:when><xsl:otherwise>""</xsl:otherwise></xsl:choose>,
