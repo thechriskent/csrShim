@@ -150,6 +150,7 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<!-- Attempts to map fields to actual JS values rather than just strings -->
 	<xsl:template name="buildJSValue">
 		<xsl:param name="rawValue" select="."/>
 		<xsl:param name="fieldName"/>
