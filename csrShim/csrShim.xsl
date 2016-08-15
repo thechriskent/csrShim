@@ -13,13 +13,12 @@
 				xmlns:o="urn:schemas-microsoft-com:office:office"
 				ddwrt:ghost="show_all">
 
-	<xsl:param name="IsDocLib" select="false()"/>
-	<xsl:param name="View" select="' '"/>
-	
 	<xsl:param name="BaseViewID" select="1"/>
 	<xsl:param name="ListTemplateType" select="100"/>
 	<xsl:param name="JSLink" />
-	<xsl:param name="FieldMapping" select="''"/>
+
+	<xsl:param name="IsDocLib" select="false()"/>
+	<xsl:param name="View" select="' '"/>
 
 	<xsl:output method="html" indent="no"/>
 
@@ -50,7 +49,6 @@
 				ctx.wpq = 'CSRS'+wpq;
 				ctx.ctxId = wpq;
 				ctx.csrShim = true;
-				ctx.superfun = 'Chris Kent';
 				ctx.isXslView = true;
 				ctx.IsClientRendering = true;
 				ctx.Templates = {};
@@ -63,7 +61,7 @@
 					<xsl:for-each select="$Rows">
 						{
 						<xsl:for-each select="./@*">
-							"<xsl:value-of select="name()"/>":<xsl:call-template name="buildJSValue"><xsl:with-param name="fieldName" select="name()"/><xsl:with-param name="rawValue" select="."/></xsl:call-template>
+							"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
 							<xsl:if test="position() != last()">,</xsl:if>
 						</xsl:for-each>
 						}<xsl:if test="position() != last()">,</xsl:if>
@@ -150,177 +148,9 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="buildJSValue">
-		<xsl:param name="rawValue" select="."/>
-		<xsl:param name="fieldName"/>
-		<xsl:param name="mapping" select="$FieldMapping"/>
-
-		<xsl:variable name="valueType">
-			<xsl:choose>
-				<xsl:when test="contains($mapping,concat($fieldName,','))">
-					<xsl:variable name="rawType" select="substring-before(substring-after($mapping,concat($fieldName,',')),';')"/>
-					<xsl:choose>
-						<xsl:when test="$rawType='Number'">
-						<xsl:value-of select="$rawType"/>
-					</xsl:when>
-						<xsl:when test="$rawType='Currency'">
-						<xsl:value-of select="'Number'"/>
-					</xsl:when>
-						<xsl:when test="$rawType='Integer'">
-						<xsl:value-of select="'Number'"/>
-					</xsl:when>
-						<xsl:when test="$rawType='Boolean'">
-						<xsl:value-of select="$rawType"/>
-					</xsl:when>
-						<xsl:when test="$rawType='DateTime'">
-						<xsl:value-of select="$rawType"/>
-					</xsl:when>
-						<xsl:when test="$rawType='Lookup'">
-						<xsl:value-of select="$rawType"/>
-					</xsl:when>
-						<xsl:when test="$rawType='URL'">
-						<xsl:value-of select="$rawType"/>
-					</xsl:when>
-						<xsl:when test="$rawType='Counter'">
-						<xsl:value-of select="'Number'"/>
-					</xsl:when>
-						<xsl:when test="$rawType='User'">
-						<xsl:value-of select="$rawType"/>
-					</xsl:when>
-						<xsl:otherwise>
-						<xsl:value-of select="'Text'"/>
-					</xsl:otherwise>
-					</xsl:choose>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="'Text'"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-
-		<xsl:choose>
-			<xsl:when test="$valueType='Boolean'">
-				<xsl:call-template name="jsValueBoolean">
-					<xsl:with-param name="rawValue" select="$rawValue"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="$valueType='URL'">
-				<xsl:call-template name="jsValueURL">
-					<xsl:with-param name="rawValue" select="$rawValue"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="$valueType='Number'">
-				<xsl:call-template name="jsValueNumber">
-					<xsl:with-param name="rawValue" select="$rawValue"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="$valueType='DateTime'">
-				<xsl:call-template name="jsValueDateTime">
-					<xsl:with-param name="rawValue" select="$rawValue"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="$valueType='User'">
-				<xsl:call-template name="jsValueUser">
-					<xsl:with-param name="rawValue" select="$rawValue"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="jsValueText">
-					<xsl:with-param name="rawValue" select="$rawValue"/>
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
 	<xsl:template name="jsValueText">
 		<xsl:param name="rawValue" select="."/>
 		"<xsl:call-template name="string-replace-all"><xsl:with-param name="text" select="$rawValue"/><xsl:with-param name="replace" select="'&quot;'"/><xsl:with-param name="by" select="'\&quot;'"/></xsl:call-template>"
-	</xsl:template>
-
-	<xsl:template name="jsValueBoolean">
-		<xsl:param name="rawValue" select="."/>
-		<xsl:choose>
-			<xsl:when test="$rawValue='True'">
-				<xsl:value-of select="'true'"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="'false'"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<xsl:template name="jsValueURL">
-		<xsl:param name="rawValue" select="."/>
-		{link:<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="substring-before($rawValue,', ')"/></xsl:call-template>,
-		text:
-		<xsl:choose>
-			<xsl:when test="contains($rawValue,', ')">
-				<xsl:call-template name="jsValueText">
-					<xsl:with-param name="rawValue" select="substring-after($rawValue,', ')"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="jsValueText">
-					<xsl:with-param name="rawValue" select="$rawValue"/>
-				</xsl:call-template>
-			</xsl:otherwise>
-		</xsl:choose>}
-	</xsl:template>
-
-	<xsl:template name="jsValueNumber">
-		<xsl:param name="rawValue" select="."/>
-		<xsl:value-of select="$rawValue"/>
-	</xsl:template>
-
-	<xsl:template name="jsValueDateTime">
-		<xsl:param name="rawValue" select="."/>
-		Date.parse(<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="$rawValue"/></xsl:call-template>)
-	</xsl:template>
-
-	<xsl:template name="jsValueUser">
-		<xsl:param name="rawValue" select="."/>
-		{value:<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="$rawValue"/></xsl:call-template>,
-		profileLink:"<xsl:call-template name="GetUserProfileLink"><xsl:with-param name="Person" select="$rawValue"/></xsl:call-template>",
-		picture:"<xsl:call-template name="GetUserProfilePicture"><xsl:with-param name="Person" select="$rawValue"/></xsl:call-template>",
-		title:"<xsl:call-template name="GetUserProfileTitle"><xsl:with-param name="Person" select="$rawValue"/></xsl:call-template>",
-		id:"<xsl:call-template name="GetUserProfileID"><xsl:with-param name="Person" select="$rawValue"/></xsl:call-template>",
-		department:"<xsl:call-template name="GetUserProfileDepartment"><xsl:with-param name="Person" select="$rawValue"/></xsl:call-template>",
-		jobTitle:"<xsl:call-template name="GetUserProfileJobTitle"><xsl:with-param name="Person" select="$rawValue"/></xsl:call-template>"}
-	</xsl:template>
-
-	<xsl:template name="GetUserProfileLink">
-		<xsl:param name="Person"/>
-		<xsl:value-of select="substring-before(substring-after($Person, 'href=&quot;'), '&quot;')"/>
-	</xsl:template>
-	
-	<xsl:template name="GetUserProfileTitle">
-		<xsl:param name="Person"/>
-		<xsl:value-of select="substring-before(substring-after(substring-after($Person, 'class=&quot;ms-subtleLink&quot;'),'&gt;'), '&lt;')"/>
-	</xsl:template>
-	
-	<xsl:template name="GetUserProfileJobTitle">
-		<xsl:param name="Person"/>
-		<xsl:value-of select="substring-before(concat(substring-after(substring-after($Person, 'ms-peopleux-detailuserline'),'&gt;'),','), ',')"/>
-	</xsl:template>
-	
-	<xsl:template name="GetUserProfileDepartment">
-		<xsl:param name="Person"/>
-		<xsl:value-of select="substring-after(substring-before(substring-after(substring-after($Person, 'ms-peopleux-detailuserline'),'&gt;'), '&lt;'),', ')"/>
-	</xsl:template>
-	
-	<xsl:template name="GetUserProfilePicture">
-		<xsl:param name="Person"/>
-		<xsl:value-of select="substring-before(substring-after(substring-after($Person, 'ms-peopleux-userImg'),'src=&quot;'), '&quot;')"/>
-	</xsl:template>
-	
-	<xsl:template name="GetUserProfileID">
-		<xsl:param name="Person"/>
-		<xsl:variable name="profileLink">
-			<xsl:call-template name="GetUserProfileLink">
-				<xsl:with-param name="Person" select="$Person"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:value-of select="substring-after($profileLink, 'ID=')"/>
 	</xsl:template>
 
 </xsl:stylesheet>
