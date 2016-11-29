@@ -15,7 +15,8 @@
 
 	<xsl:param name="BaseViewID" select="1"/>
 	<xsl:param name="ListTemplateType" select="100"/>
-	<xsl:param name="JSLink" />
+	<xsl:param name="JSLink"/>
+	<xsl:param name="ShimType" select="' '"/>
 	
 	<xsl:param name="RawDump" select="false()"/>
 
@@ -24,23 +25,64 @@
 
 	<xsl:output method="html" indent="no"/>
 
-	<!--<xsl:variable name="Rows" select="/dsQueryResponse/Rows/Row"/>
-	<xsl:variable name="dvt_RowCount" select="count($Rows)"/>-->
-
-
-	<xsl:template match="/">
 	
+	<xsl:template match="dsQueryResponse[@ViewStyleID]">
+		<xsl:call-template name="routeToShim">
+			<xsl:with-param name="dsType" select="'List'"/>
+			<xsl:with-param name="Rows" select="Rows/Row"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template match="dsQueryResponse[not(@ViewStyleID)]">
+		<xsl:call-template name="routeToShim">
+			<xsl:with-param name="dsType" select="'CQWP'"/>
+			<xsl:with-param name="Rows" select="Rows/Row"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template match="rss">
+		<xsl:call-template name="routeToShim">
+			<xsl:with-param name="dsType" select="'RSS'"/>
+			<xsl:with-param name="Rows" select="channel/item"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+
+	<xsl:template match="*">
+		<xsl:call-template name="routeToShim"/>
+	</xsl:template>
+	
+	<xsl:template name="routeToShim">
+		<xsl:param name="dsType" select="'Unknown'"/>
+		<xsl:param name="Rows"/>
+		
+		<xsl:variable name="sType">
+			<xsl:choose>
+				<xsl:when test="$ShimType != ' '">
+					<xsl:value-of select="$ShimType"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$dsType"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
 		<xsl:choose>
 			<xsl:when test="$RawDump">
-				<xmp><xsl:copy-of select="*"/></xmp>
+				<xmp><xsl:copy-of select="/"/></xmp>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:call-template name="csrShim"/>
+				<xsl:call-template name="csrShim">
+					<xsl:with-param name="sType" select="$sType"/>
+				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	
+	
+	
 	<xsl:template name="csrShim">
+		<xsl:param name="sType"/>
 
 		<xsl:call-template name="jsLinks">
 			<xsl:with-param name="linkString" select="$JSLink"/>
@@ -63,6 +105,7 @@
 				ctx.wpq = 'CSRS'+wpq;
 				ctx.ctxId = wpq;
 				ctx.csrShim = true;
+				ctx.ShimType = "<xsl:value-of select="$sType"/>";
 				ctx.isXslView = true;
 				ctx.IsClientRendering = true;
 				ctx.Templates = {};
