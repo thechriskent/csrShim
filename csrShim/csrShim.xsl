@@ -45,6 +45,7 @@
 		<xsl:call-template name="routeToShim">
 			<xsl:with-param name="dsType" select="'RSS'"/>
 			<xsl:with-param name="Rows" select="/rss/channel/item"/>
+			<xsl:with-param name="Rows_UseElements" select="true()"/>
 			<xsl:with-param name="Root" select="/rss/channel"/>
 			<xsl:with-param name="Root_UseElements" select="true()"/>
 			<xsl:with-param name="Root_Exclude" select="'item'"/>
@@ -59,6 +60,7 @@
 	<xsl:template name="routeToShim">
 		<xsl:param name="dsType" select="'Unknown'"/>
 		<xsl:param name="Rows"/>
+		<xsl:param name="Rows_UseElements"/>
 		<xsl:param name="Root"/>
 		<xsl:param name="Root_UseElements"/>
 		<xsl:param name="Root_Exclude"/>
@@ -82,6 +84,7 @@
 				<xsl:call-template name="csrShim">
 					<xsl:with-param name="sType" select="$sType"/>
 					<xsl:with-param name="Rows" select="$Rows"/>
+					<xsl:with-param name="Rows_UseElements" select="$Rows_UseElements"/>
 					<xsl:with-param name="Root" select="$Root"/>
 					<xsl:with-param name="Root_UseElements" select="$Root_UseElements"/>
 					<xsl:with-param name="Root_Exclude" select="$Root_Exclude"/>
@@ -95,6 +98,7 @@
 	<xsl:template name="csrShim">
 		<xsl:param name="sType"/>
 		<xsl:param name="Rows"/>
+		<xsl:param name="Rows_UseElements"/>
 		<xsl:param name="Root"/>
 		<xsl:param name="Root_UseElements"/>
 		<xsl:param name="Root_Exclude"/>
@@ -102,7 +106,6 @@
 		<xsl:call-template name="jsLinks">
 			<xsl:with-param name="linkString" select="$JSLink"/>
 		</xsl:call-template>
-
 		<div id="scriptCSRS">
 		</div>
 		<div id="scriptPagingCSRS">
@@ -131,9 +134,11 @@
 				ctx.ListTemplateType = <xsl:value-of select="$ListTemplateType"/>;
 				<xsl:call-template name="listData">
 					<xsl:with-param name="Rows" select="$Rows"/>
+					<xsl:with-param name="Rows_UseElements" select="$Rows_UseElements"/>
 				</xsl:call-template>
 				<xsl:call-template name="listSchema">
 					<xsl:with-param name="Rows" select="$Rows"/>
+					<xsl:with-param name="Rows_UseElements" select="$Rows_UseElements"/>
 				</xsl:call-template>
 				<xsl:call-template name="rootData">
 					<xsl:with-param name="Root" select="$Root"/>
@@ -215,18 +220,31 @@
 	
 	<xsl:template name="listData">
 		<xsl:param name="Rows" select="."/>
+		<xsl:param name="Rows_UseElements" select="false()"/>
 		<xsl:variable name="RowCount" select="count($Rows)"/>
 				ctx.ListData = {
 					Row: [
-					<xsl:for-each select="$Rows">
-						{
-						<xsl:for-each select="./@*">
-							"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
-							<xsl:if test="position() != last()">,</xsl:if>
-						</xsl:for-each>
-						}<xsl:if test="position() != last()">,</xsl:if>
-					</xsl:for-each>
-					]<xsl:if test="$RowCount &gt; 0">,
+					<xsl:choose>
+						<xsl:when test="$Rows_UseElements">
+							<xsl:for-each select="$Rows">
+								{<xsl:for-each select="./*">
+									"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
+									<xsl:if test="position() != last()">,</xsl:if>
+								</xsl:for-each>
+								}<xsl:if test="position() != last()">,</xsl:if>
+							</xsl:for-each>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:for-each select="$Rows">
+								{<xsl:for-each select="./@*">
+									"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
+									<xsl:if test="position() != last()">,</xsl:if>
+								</xsl:for-each>
+								}<xsl:if test="position() != last()">,</xsl:if>
+							</xsl:for-each>
+						</xsl:otherwise>
+					</xsl:choose>
+					]<xsl:if test="($RowCount &gt; 0) and ($Rows[1]/@ID)">,
 					FirstRow:<xsl:value-of select="$Rows[1]/@ID"/>,
 					LastRow:<xsl:value-of select="$Rows[position()=last()]/@ID"/></xsl:if>
 				};
@@ -234,6 +252,7 @@
 
 	<xsl:template name="listSchema">
 		<xsl:param name="Rows" select="."/>
+		<xsl:param name="Rows_UseElements" select="false()"/>
 				ctx.ListSchema = {
 					IsDocLib: <xsl:choose><xsl:when test="$IsDocLib">"true"</xsl:when><xsl:otherwise>""</xsl:otherwise></xsl:choose>,
 					Field:[
