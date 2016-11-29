@@ -24,8 +24,8 @@
 
 	<xsl:output method="html" indent="no"/>
 
-	<xsl:variable name="Rows" select="/dsQueryResponse/Rows/Row"/>
-	<xsl:variable name="dvt_RowCount" select="count($Rows)"/>
+	<!--<xsl:variable name="Rows" select="/dsQueryResponse/Rows/Row"/>
+	<xsl:variable name="dvt_RowCount" select="count($Rows)"/>-->
 
 
 	<xsl:template match="/">
@@ -70,28 +70,8 @@
 				ctx.view = "<xsl:value-of select="$View"/>";
 				ctx.BaseViewID = <xsl:value-of select="$BaseViewID"/>;
 				ctx.ListTemplateType = <xsl:value-of select="$ListTemplateType"/>;
-				ctx.ListData = {
-					Row: [
-					<xsl:for-each select="$Rows">
-						{
-						<xsl:for-each select="./@*">
-							"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
-							<xsl:if test="position() != last()">,</xsl:if>
-						</xsl:for-each>
-						}<xsl:if test="position() != last()">,</xsl:if>
-					</xsl:for-each>
-					]<xsl:if test="dvt_RowCount &gt; 0">,
-					FirstRow:<xsl:value-of select="$Rows[1]/@ID"/>,
-					LastRow:<xsl:value-of select="$Rows[position()=last()]/@ID"/></xsl:if>
-				};
-				ctx.ListSchema = {
-					IsDocLib: <xsl:choose><xsl:when test="$IsDocLib">"true"</xsl:when><xsl:otherwise>""</xsl:otherwise></xsl:choose>,
-					Field:[
-					<xsl:for-each select="$Rows[1]/@*">
-						{Name:"<xsl:value-of select="name()"/>"}<xsl:if test="position() != last()">,</xsl:if>
-					</xsl:for-each>
-					]
-				}
+				<xsl:call-template name="listData"/>
+				<xsl:call-template name="listSchema"/>
 				ctx.BasePermissions = {};
 
 				window['ctx'+wpq] = ctx;
@@ -140,6 +120,37 @@
 				<xsl:with-param name="splitChar" select="$splitChar"/>
 			</xsl:call-template>
 		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="listData">
+		<xsl:param name="Rows" select="/dsQueryResponse/Rows/Row"/>
+		<xsl:variable name="RowCount" select="count($Rows)"/>
+				ctx.ListData = {
+					Row: [
+					<xsl:for-each select="$Rows">
+						{
+						<xsl:for-each select="./@*">
+							"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
+							<xsl:if test="position() != last()">,</xsl:if>
+						</xsl:for-each>
+						}<xsl:if test="position() != last()">,</xsl:if>
+					</xsl:for-each>
+					]<xsl:if test="$RowCount &gt; 0">,
+					FirstRow:<xsl:value-of select="$Rows[1]/@ID"/>,
+					LastRow:<xsl:value-of select="$Rows[position()=last()]/@ID"/></xsl:if>
+				};
+	</xsl:template>
+
+	<xsl:template name="listSchema">
+		<xsl:param name="Rows" select="/dsQueryResponse/Rows/Row"/>
+				ctx.ListSchema = {
+					IsDocLib: <xsl:choose><xsl:when test="$IsDocLib">"true"</xsl:when><xsl:otherwise>""</xsl:otherwise></xsl:choose>,
+					Field:[
+					<xsl:for-each select="$Rows[1]/@*">
+						{Name:"<xsl:value-of select="name()"/>"}<xsl:if test="position() != last()">,</xsl:if>
+					</xsl:for-each>
+					]
+				}
 	</xsl:template>
 
 	<xsl:template name="string-replace-all">
