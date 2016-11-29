@@ -29,21 +29,25 @@
 	<xsl:template match="dsQueryResponse[@ViewStyleID]">
 		<xsl:call-template name="routeToShim">
 			<xsl:with-param name="dsType" select="'List'"/>
-			<xsl:with-param name="Rows" select="Rows/Row"/>
+			<xsl:with-param name="Rows" select="/dsQueryResponse/Rows/Row"/>
+			<xsl:with-param name="Root" select="/dsQueryResponse"/>
 		</xsl:call-template>
 	</xsl:template>
 	
 	<xsl:template match="dsQueryResponse[not(@ViewStyleID)]">
 		<xsl:call-template name="routeToShim">
 			<xsl:with-param name="dsType" select="'CQWP'"/>
-			<xsl:with-param name="Rows" select="Rows/Row"/>
+			<xsl:with-param name="Rows" select="/dsQueryResponse/Rows/Row"/>
 		</xsl:call-template>
 	</xsl:template>
 	
 	<xsl:template match="rss">
 		<xsl:call-template name="routeToShim">
 			<xsl:with-param name="dsType" select="'RSS'"/>
-			<xsl:with-param name="Rows" select="channel/item"/>
+			<xsl:with-param name="Rows" select="/rss/channel/item"/>
+			<xsl:with-param name="Root" select="/rss/channel"/>
+			<xsl:with-param name="Root_UseElements" select="true()"/>
+			<xsl:with-param name="Root_Exclude" select="'item'"/>
 		</xsl:call-template>
 	</xsl:template>
 	
@@ -55,6 +59,9 @@
 	<xsl:template name="routeToShim">
 		<xsl:param name="dsType" select="'Unknown'"/>
 		<xsl:param name="Rows"/>
+		<xsl:param name="Root"/>
+		<xsl:param name="Root_UseElements"/>
+		<xsl:param name="Root_Exclude"/>
 		
 		<xsl:variable name="sType">
 			<xsl:choose>
@@ -74,6 +81,10 @@
 			<xsl:otherwise>
 				<xsl:call-template name="csrShim">
 					<xsl:with-param name="sType" select="$sType"/>
+					<xsl:with-param name="Rows" select="$Rows"/>
+					<xsl:with-param name="Root" select="$Root"/>
+					<xsl:with-param name="Root_UseElements" select="$Root_UseElements"/>
+					<xsl:with-param name="Root_Exclude" select="$Root_Exclude"/>
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -83,6 +94,10 @@
 	
 	<xsl:template name="csrShim">
 		<xsl:param name="sType"/>
+		<xsl:param name="Rows"/>
+		<xsl:param name="Root"/>
+		<xsl:param name="Root_UseElements"/>
+		<xsl:param name="Root_Exclude"/>
 
 		<xsl:call-template name="jsLinks">
 			<xsl:with-param name="linkString" select="$JSLink"/>
@@ -109,13 +124,22 @@
 				ctx.isXslView = true;
 				ctx.IsClientRendering = true;
 				ctx.Templates = {};
+				ctx.BasePermissions = {};
 				ctx.IsDocLib = <xsl:value-of select="$IsDocLib"/>;
 				ctx.view = "<xsl:value-of select="$View"/>";
 				ctx.BaseViewID = <xsl:value-of select="$BaseViewID"/>;
 				ctx.ListTemplateType = <xsl:value-of select="$ListTemplateType"/>;
-				<xsl:call-template name="listData"/>
-				<xsl:call-template name="listSchema"/>
-				ctx.BasePermissions = {};
+				<xsl:call-template name="listData">
+					<xsl:with-param name="Rows" select="$Rows"/>
+				</xsl:call-template>
+				<xsl:call-template name="listSchema">
+					<xsl:with-param name="Rows" select="$Rows"/>
+				</xsl:call-template>
+				<xsl:call-template name="rootData">
+					<xsl:with-param name="Root" select="$Root"/>
+					<xsl:with-param name="Root_UseElements" select="$Root_UseElements"/>
+					<xsl:with-param name="Root_Exclude" select="$Root_Exclude"/>
+				</xsl:call-template>
 
 				window['ctx'+wpq] = ctx;
 
@@ -165,8 +189,32 @@
 		</xsl:if>
 	</xsl:template>
 	
+	<xsl:template name="rootData">
+		<xsl:param name="Root"/>
+		<xsl:param name="Root_UseElements" select="false()"/>
+		<xsl:param name="Root_Exclude" select="''"/>
+				ctx.RootData = {
+				<xsl:if test="$Root">
+					<xsl:choose>
+						<xsl:when test="$Root_UseElements">
+							<xsl:for-each select="$Root/*[name()!=$Root_Exclude]">
+								"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
+								<xsl:if test="position() != last()">,</xsl:if>
+							</xsl:for-each>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:for-each select="$Root/@*">
+								"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
+								<xsl:if test="position() != last()">,</xsl:if>
+							</xsl:for-each>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
+				};
+	</xsl:template>
+	
 	<xsl:template name="listData">
-		<xsl:param name="Rows" select="/dsQueryResponse/Rows/Row"/>
+		<xsl:param name="Rows" select="."/>
 		<xsl:variable name="RowCount" select="count($Rows)"/>
 				ctx.ListData = {
 					Row: [
@@ -185,7 +233,7 @@
 	</xsl:template>
 
 	<xsl:template name="listSchema">
-		<xsl:param name="Rows" select="/dsQueryResponse/Rows/Row"/>
+		<xsl:param name="Rows" select="."/>
 				ctx.ListSchema = {
 					IsDocLib: <xsl:choose><xsl:when test="$IsDocLib">"true"</xsl:when><xsl:otherwise>""</xsl:otherwise></xsl:choose>,
 					Field:[
@@ -193,7 +241,7 @@
 						{Name:"<xsl:value-of select="name()"/>"}<xsl:if test="position() != last()">,</xsl:if>
 					</xsl:for-each>
 					]
-				}
+				};
 	</xsl:template>
 
 	<xsl:template name="string-replace-all">
