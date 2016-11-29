@@ -16,6 +16,8 @@
 	<xsl:param name="BaseViewID" select="1"/>
 	<xsl:param name="ListTemplateType" select="100"/>
 	<xsl:param name="JSLink" />
+	
+	<xsl:param name="RawDump" select="false()"/>
 
 	<xsl:param name="IsDocLib" select="false()"/>
 	<xsl:param name="View" select="' '"/>
@@ -27,6 +29,18 @@
 
 
 	<xsl:template match="/">
+	
+		<xsl:choose>
+			<xsl:when test="$RawDump">
+				<xmp><xsl:copy-of select="*"/></xmp>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="csrShim"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="csrShim">
 
 		<xsl:call-template name="jsLinks">
 			<xsl:with-param name="linkString" select="$JSLink"/>
