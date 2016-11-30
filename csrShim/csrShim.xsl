@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:x="http://www.w3.org/2001/XMLSchema"
 				xmlns:d="http://schemas.microsoft.com/sharepoint/dsp"
 				version="1.0"
-				exclude-result-prefixes="xsl msxsl x d ddwrt asp SharePoint ddwrt2 o __designer atom"
+				exclude-result-prefixes="xsl msxsl x d ddwrt asp SharePoint ddwrt2 o __designer rss1 atom atom2 rdf dc itunes"
 				xmlns:ddwrt="http://schemas.microsoft.com/WebParts/v2/DataView/runtime"
 				xmlns:asp="http://schemas.microsoft.com/ASPNET/20"
 				xmlns:__designer="http://schemas.microsoft.com/WebParts/v2/DataView/designer"
@@ -11,7 +11,12 @@
 				xmlns:SharePoint="Microsoft.SharePoint.WebControls"
 				xmlns:ddwrt2="urn:frontpage:internal"
 				xmlns:o="urn:schemas-microsoft-com:office:office"
+				xmlns:rss1="http://purl.org/rss/1.0/"
 				xmlns:atom="http://www.w3.org/2005/Atom"
+				xmlns:atom2="http://purl.org/atom/ns#"
+				xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+				xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+				xmlns:dc="http://purl.org/dc/elements/1.1/"
 				ddwrt:ghost="show_all">
 
 	<xsl:param name="BaseViewID" select="1"/>
@@ -53,6 +58,17 @@
 		</xsl:call-template>
 	</xsl:template>
 	
+	<xsl:template match="rdf:RDF">
+		<xsl:call-template name="routeToShim">
+			<xsl:with-param name="dsType" select="'RDF'"/>
+			<xsl:with-param name="Rows" select="rss1:item"/>
+			<xsl:with-param name="Rows_UseElements" select="true()"/>
+			<xsl:with-param name="Root" select="rss1:channel"/>
+			<xsl:with-param name="Root_UseElements" select="true()"/>
+			<xsl:with-param name="Root_Exclude" select="'item'"/>
+		</xsl:call-template>
+	</xsl:template>
+	
 	<xsl:template match="atom:feed">
 		<xsl:call-template name="routeToShim">
 			<xsl:with-param name="dsType" select="'Atom'"/>
@@ -64,6 +80,16 @@
 		</xsl:call-template>
 	</xsl:template>
 	
+	<xsl:template match="atom2:feed">
+		<xsl:call-template name="routeToShim">
+			<xsl:with-param name="dsType" select="'Atom2'"/>
+			<xsl:with-param name="Rows" select="/atom2:feed/atom2:entry"/>
+			<xsl:with-param name="Rows_UseElements" select="true()"/>
+			<xsl:with-param name="Root" select="/atom2:feed"/>
+			<xsl:with-param name="Root_UseElements" select="true()"/>
+			<xsl:with-param name="Root_Exclude" select="'entry'"/>
+		</xsl:call-template>
+	</xsl:template>
 
 	<xsl:template match="*">
 		<xsl:call-template name="routeToShim">
