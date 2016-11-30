@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:x="http://www.w3.org/2001/XMLSchema"
 				xmlns:d="http://schemas.microsoft.com/sharepoint/dsp"
 				version="1.0"
-				exclude-result-prefixes="xsl msxsl x d ddwrt asp SharePoint ddwrt2 o __designer"
+				exclude-result-prefixes="xsl msxsl x d ddwrt asp SharePoint ddwrt2 o __designer atom"
 				xmlns:ddwrt="http://schemas.microsoft.com/WebParts/v2/DataView/runtime"
 				xmlns:asp="http://schemas.microsoft.com/ASPNET/20"
 				xmlns:__designer="http://schemas.microsoft.com/WebParts/v2/DataView/designer"
@@ -11,6 +11,7 @@
 				xmlns:SharePoint="Microsoft.SharePoint.WebControls"
 				xmlns:ddwrt2="urn:frontpage:internal"
 				xmlns:o="urn:schemas-microsoft-com:office:office"
+				xmlns:atom="http://www.w3.org/2005/Atom"
 				ddwrt:ghost="show_all">
 
 	<xsl:param name="BaseViewID" select="1"/>
@@ -52,9 +53,22 @@
 		</xsl:call-template>
 	</xsl:template>
 	
+	<xsl:template match="atom:feed">
+		<xsl:call-template name="routeToShim">
+			<xsl:with-param name="dsType" select="'Atom'"/>
+			<xsl:with-param name="Rows" select="/atom:feed/atom:entry"/>
+			<xsl:with-param name="Rows_UseElements" select="true()"/>
+			<xsl:with-param name="Root" select="/atom:feed"/>
+			<xsl:with-param name="Root_UseElements" select="true()"/>
+			<xsl:with-param name="Root_Exclude" select="'entry'"/>
+		</xsl:call-template>
+	</xsl:template>
+	
 
 	<xsl:template match="*">
-		<xsl:call-template name="routeToShim"/>
+		<xsl:call-template name="routeToShim">
+			<xsl:with-param name="Rows" select="*"/>
+		</xsl:call-template>
 	</xsl:template>
 	
 	<xsl:template name="routeToShim">
@@ -256,9 +270,18 @@
 				ctx.ListSchema = {
 					IsDocLib: <xsl:choose><xsl:when test="$IsDocLib">"true"</xsl:when><xsl:otherwise>""</xsl:otherwise></xsl:choose>,
 					Field:[
-					<xsl:for-each select="$Rows[1]/@*">
-						{Name:"<xsl:value-of select="name()"/>"}<xsl:if test="position() != last()">,</xsl:if>
-					</xsl:for-each>
+					<xsl:choose>
+						<xsl:when test="$Rows_UseElements">
+							<xsl:for-each select="$Rows[1]/*">
+								{Name:"<xsl:value-of select="name()"/>"}<xsl:if test="position() != last()">,</xsl:if>
+							</xsl:for-each>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:for-each select="$Rows[1]/@*">
+								{Name:"<xsl:value-of select="name()"/>"}<xsl:if test="position() != last()">,</xsl:if>
+							</xsl:for-each>
+						</xsl:otherwise>
+					</xsl:choose>
 					]
 				};
 	</xsl:template>
