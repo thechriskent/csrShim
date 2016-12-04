@@ -233,8 +233,13 @@
 	</xsl:template>
 	
 	<xsl:template name="placeholders">
-		<div id="scriptCSRS">
-		</div>
+		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tbody>
+				<tr>
+					<td id="scriptCSRS"></td>
+				</tr>
+			</tbody>
+		</table>
 		<div id="scriptPagingCSRS">
 		</div>
 	</xsl:template>
