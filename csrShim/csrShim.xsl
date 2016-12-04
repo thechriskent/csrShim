@@ -146,10 +146,8 @@
 		<xsl:call-template name="jsLinks">
 			<xsl:with-param name="linkString" select="$JSLink"/>
 		</xsl:call-template>
-		<div id="scriptCSRS">
-		</div>
-		<div id="scriptPagingCSRS">
-		</div>
+		
+		<xsl:call-template name="placeholders"/>
 
 		<script type="text/javascript">
 			(function(){
@@ -232,6 +230,18 @@
 				<xsl:with-param name="splitChar" select="$splitChar"/>
 			</xsl:call-template>
 		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="placeholders">
+		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tbody>
+				<tr>
+					<td id="scriptCSRS"></td>
+				</tr>
+			</tbody>
+		</table>
+		<div id="scriptPagingCSRS">
+		</div>
 	</xsl:template>
 	
 	<xsl:template name="rootData">
@@ -336,7 +346,7 @@
 
 	<xsl:template name="jsValueText">
 		<xsl:param name="rawValue" select="."/>
-		"<xsl:call-template name="string-replace-all"><xsl:with-param name="text"><xsl:call-template name="string-replace-all"><xsl:with-param name="text" select="$rawValue"/><xsl:with-param name="replace" select="'&quot;'"/><xsl:with-param name="by" select="'\&quot;'"/></xsl:call-template></xsl:with-param><xsl:with-param name="replace" select="'&#10;'"/><xsl:with-param name="by" select="'\&#10;'"/></xsl:call-template>"
+		"<xsl:call-template name="string-replace-all"><xsl:with-param name="text"><xsl:call-template name="string-replace-all"><xsl:with-param name="text"><xsl:call-template name="string-replace-all"><xsl:with-param name="text" select="$rawValue"/><xsl:with-param name="replace" select="'&quot;'"/><xsl:with-param name="by" select="'\&quot;'"/></xsl:call-template></xsl:with-param><xsl:with-param name="replace" select="'\'"/><xsl:with-param name="by" select="'\\'"/></xsl:call-template></xsl:with-param><xsl:with-param name="replace" select="'&#10;'"/><xsl:with-param name="by" select="'\&#10;'"/></xsl:call-template>"
 	</xsl:template>
 
 </xsl:stylesheet>

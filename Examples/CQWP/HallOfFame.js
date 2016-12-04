@@ -1,7 +1,7 @@
 ﻿(function(){
 	
 	var HallOfFame = {
-		BaseViewID: 1,
+		BaseViewID: 40,
 		ListTemplateType: 100,
 		OnPreRender: hofPreRender,
 		Templates: {
@@ -61,16 +61,15 @@
 	function hofItem(ctx){
 		var sip = ctx.CurrentItem.Person[0].sip;
 		var photoUrl = '/_layouts/15/images/PersonPlaceholder.96x96x32.png';
-		if(ctx.CurrentItem.Person[0].picture){
-			photoUrl = ctx.CurrentItem.Person[0].picture;
-		}
 	    var photo = '/_layouts/15/userphoto.aspx?accountname=' + sip + '&size=L&url=' + photoUrl;	
-	    var userUrl = _spPageContextInfo.siteServerRelativeUrl + '/_layouts/15/userdisp.aspx?ID=' + ctx.CurrentItem.Person[0].id; 		    				
+	    var userUrl = "/";
+	    
+	    var itemId = 'hofItem' + ctx.CurrentItem.ID;
 	
-		var item = '<a href="' + userUrl + '">' +
+		var item = '<a id="' + itemId + '" href="' + userUrl + '">' +
 				   ' <div class="hof-item" style="background-color:' + ctx.CurrentItem.Color + ';">' +
 				   '  <div>' + ctx.CurrentItem.Title + '</div>' +
-				   '  <img style="max-height:72px;max-width:72px;" src="' + photo + '"/>' +
+				   '  <img style="max-height:72px;max-width:72px;visibility:hidden;" src="' + photo + '"/>' +
 				   ' </div>' +
 				   '</a>';
 		if(ctx.ListData.LastRow == ctx.CurrentItem.ID){
@@ -87,8 +86,52 @@
 	}
 	
 	function hofPostRender(ctx){
+		SP.SOD.executeFunc('sp.js', 'SP.ClientContext', function(){
+			SP.SOD.executeFunc('userprofile','PeopleManager', function(){
+				var jsCtx = SP.ClientContext.get_current();
+				var peopleManager = new SP.UserProfiles.PeopleManager(jsCtx);
+				
+				this.userProps = [];
+				for(var i=0;i<ctx.ListData.Row.length;i++){
+					var username = ctx.ListData.Row[i].Person;
+					var username = username.substring(username.indexOf('|')+1);
+					this.userProps[i] = {
+						username:username,
+						properties: peopleManager.getPropertiesFor(username),
+						id: ctx.ListData.Row[i].ID
+					};
+					jsCtx.load(this.userProps[i].properties,'PictureUrl','UserUrl');
+				}
+				
+				jsCtx.executeQueryAsync(
+					Function.createDelegate(this,applyPictures),
+					function(s,a){
+						if(window.console && window.console.log){
+							console.log('Unable to get profile pictures!');
+							console.log(a.get_message());
+						}
+					}
+				);
+			});
+		});
+		
 		if(window.console && window.console.log){
 			console.log('Finished Hall Of Fame!');
+		}
+	}
+	
+	function applyPictures(){
+		for(var i=0; i<this.userProps.length; i++){
+			var userUrl = this.userProps[i].properties.get_userUrl();
+			var pictureUrl = this.userProps[i].properties.get_pictureUrl();
+			var accountName = encodeURIComponent(this.userProps[i].username);
+			var itemElem = document.getElementById('hofItem' + this.userProps[i].id);
+			itemElem.href = userUrl;
+			var itemImg = itemElem.getElementsByTagName('img')[0];
+			if(pictureUrl){
+				itemImg.src = '/_layouts/15/userphoto.aspx?accountname=' + accountName + '&size=L&url=' + pictureUrl;
+			}
+			itemImg.style.visibility = 'visible';
 		}
 	}
 	

@@ -1,0 +1,30 @@
+<WpNs0:ContentByQueryWebPart runat="server"
+ MainXslLink="/intranet/Style Library/csrShim/csrShim.xsl"
+ HeaderXslLink="/intranet/Style Library/csrShim/EmptyStyleSheet.xsl"
+ ItemXslLink="/intranet/Style Library/csrShim/EmptyStyleSheet.xsl"
+ CommonViewFields="Title,Text;Person,User;Color,Text;"
+ WebUrl="~site" ListGuid="9fc32e4c-5024-4059-83ab-e335a3d43a91"
+ DataMappingViewFields="{fa564e0f-0c70-4ab9-b863-0177e6ddd247},Text;"
+ SortBy="Created" SortByFieldType="DateTime" SortByDirection="Asc"
+ DataMappings="Title:{fa564e0f-0c70-4ab9-b863-0177e6ddd247},Title,Text;"
+ ServerTemplate="100" UseCopyUtil="True" ShowUntargetedItems="False"
+ EnableOriginalValue="False" ListId="00000000-0000-0000-0000-000000000000"
+ ViewFlag="0" ViewContentTypeId="" ListUrl="" ListDisplayName=""
+ PageSize="-1" UseSQLDataSourcePaging="True" DataSourceID="" ShowWithSampleData="False"
+ AsyncRefresh="False" ManualRefresh="False" AutoRefresh="False" AutoRefreshInterval="60" 
+ NoDefaultStyle="" InitialAsyncDataFetch="False"
+ Title="Content Query" FrameType="TitleBarOnly" SuppressWebPartChrome="False"
+ Description="Displays a dynamic view of content from your site." IsIncluded="True"
+ ZoneID="FullPage" PartOrder="2" FrameState="Normal" AllowRemove="True"
+ AllowZoneChange="True" AllowMinimize="True" AllowConnect="True" AllowEdit="True"
+ AllowHide="True" IsVisible="True" DetailLink="" HelpLink="" HelpMode="Modeless"
+ Dir="Default" PartImageSmall="" MissingAssembly="Cannot import this Web Part."
+ PartImageLarge="" IsIncludedFilter="" ExportControlledProperties="True"
+ ConnectionID="00000000-0000-0000-0000-000000000000" ID="g_c749d1e9_670e_4fbc_9b4f_a1e9509aefee"
+ ChromeType="TitleOnly" ExportMode="All" __MarkupType="vsattributemarkup"
+ __WebPartId="{C749D1E9-670E-4FBC-9B4F-A1E9509AEFEE}" WebPart="true" Height="" Width="">
+	<ParameterBindings>
+	    <ParameterBinding Name="BaseViewID" Default="40"/>
+		<ParameterBinding Name="JSLink" Default="/intranet/Style Library/csrShim/HallOfFame.js"/>
+	</ParameterBindings>
+</WpNs0:ContentByQueryWebPart>
