@@ -336,7 +336,7 @@
 
 	<xsl:template name="jsValueText">
 		<xsl:param name="rawValue" select="."/>
-		"<xsl:call-template name="string-replace-all"><xsl:with-param name="text"><xsl:call-template name="string-replace-all"><xsl:with-param name="text" select="$rawValue"/><xsl:with-param name="replace" select="'&quot;'"/><xsl:with-param name="by" select="'\&quot;'"/></xsl:call-template></xsl:with-param><xsl:with-param name="replace" select="'&#10;'"/><xsl:with-param name="by" select="'\&#10;'"/></xsl:call-template>"
+		"<xsl:call-template name="string-replace-all"><xsl:with-param name="text"><xsl:call-template name="string-replace-all"><xsl:with-param name="text"><xsl:call-template name="string-replace-all"><xsl:with-param name="text" select="$rawValue"/><xsl:with-param name="replace" select="'&quot;'"/><xsl:with-param name="by" select="'\&quot;'"/></xsl:call-template></xsl:with-param><xsl:with-param name="replace" select="'\'"/><xsl:with-param name="by" select="'\\'"/></xsl:call-template></xsl:with-param><xsl:with-param name="replace" select="'&#10;'"/><xsl:with-param name="by" select="'\&#10;'"/></xsl:call-template>"
 	</xsl:template>
 
 </xsl:stylesheet>
