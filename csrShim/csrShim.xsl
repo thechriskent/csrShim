@@ -146,10 +146,8 @@
 		<xsl:call-template name="jsLinks">
 			<xsl:with-param name="linkString" select="$JSLink"/>
 		</xsl:call-template>
-		<div id="scriptCSRS">
-		</div>
-		<div id="scriptPagingCSRS">
-		</div>
+		
+		<xsl:call-template name="placeholders"/>
 
 		<script type="text/javascript">
 			(function(){
@@ -232,6 +230,13 @@
 				<xsl:with-param name="splitChar" select="$splitChar"/>
 			</xsl:call-template>
 		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="placeholders">
+		<div id="scriptCSRS">
+		</div>
+		<div id="scriptPagingCSRS">
+		</div>
 	</xsl:template>
 	
 	<xsl:template name="rootData">
