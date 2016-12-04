@@ -25,36 +25,36 @@
 					 ' width:504px;}' +
 					 '.halloffame div{'+
 					 ' box-sizing:border-box;}' +
-					 '.halloffame .header{' +
+					 '.hof-header{' +
 					 ' font-size:18px;' +
 					 ' font-weight:bold;' +
 					 ' border:solid black 4px;' +
 					 ' padding:6px;}' +
-					 '.halloffame .items{' +
+					 '.hof-items{' +
 					 ' border-right:solid black 4px;}' +
-					 '.halloffame .items:after{' +
+					 '.hof-items:after{' +
 					 ' clear:both;' +
 					 ' content:"";' +
 					 ' display:block;}' +
-					 '.halloffame .item{' +
+					 '.hof-item{' +
 					 ' float:left;' +
 					 ' width:125px;' +
 					 ' border-left:solid black 4px;' +
 					 ' border-bottom:solid black 4px;' +
 					 ' height:100px;}' +
-					 '.halloffame .item div{' +
+					 '.hof-item div{' +
 					 ' color:black;' +
 					 ' font-weight:bold;' +
 					 ' font-size:15px;}' +
-					 '.halloffame .item:hover{' +
+					 '.hof-item:hover{' +
 					 ' filter:brightness(75%);}' +
-					 '.halloffame .footer{' +
+					 '.hof-footer{' +
 					 ' border:solid black 4px;' +
 					 ' border-top:none;' +
 					 ' padding:3px;' +
 					 ' font-size:10px;}' +
 					 '</style>';
-		var header = '<div class="halloffame"><div class="header">- Hall of Fame -</div><div class="items">';
+		var header = '<div class="halloffame"><div class="hof-header">- Hall of Fame -</div><div class="hof-items">';
 		return styles + header;
 	}
 	
@@ -68,7 +68,7 @@
 	    var userUrl = _spPageContextInfo.siteServerRelativeUrl + '/_layouts/15/userdisp.aspx?ID=' + ctx.CurrentItem.Person[0].id; 		    				
 	
 		var item = '<a href="' + userUrl + '">' +
-				   ' <div class="item" style="background-color:' + ctx.CurrentItem.Color + ';">' +
+				   ' <div class="hof-item" style="background-color:' + ctx.CurrentItem.Color + ';">' +
 				   '  <div>' + ctx.CurrentItem.Title + '</div>' +
 				   '  <img style="max-height:72px;max-width:72px;" src="' + photo + '"/>' +
 				   ' </div>' +
@@ -82,7 +82,7 @@
 	}
 	
 	function hofFooter(ctx){
-		var footer = '<div class="halloffame"><div class="footer">Click on a person to learn more</div></div>';
+		var footer = '<div class="halloffame"><div class="hof-footer">Click on a person to learn more</div></div>';
 		return footer;
 	}
 	
