@@ -277,7 +277,7 @@
 					<xsl:choose>
 						<xsl:when test="$Rows_UseElements">
 							<xsl:for-each select="$Rows">
-								{<xsl:if test="position() = 0">firstRow:true,</xsl:if><xsl:if test="position() = last()">lastRow:true,</xsl:if>
+								{<xsl:if test="position() = 1">firstRow:true,</xsl:if><xsl:if test="position() = last()">lastRow:true,</xsl:if>
 								<xsl:for-each select="./*">
 									"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
 									<xsl:if test="position() != last()">,</xsl:if>
@@ -287,7 +287,7 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:for-each select="$Rows">
-								{<xsl:if test="position() = 0">firstRow:true,</xsl:if><xsl:if test="position() = last()">lastRow:true,</xsl:if>
+								{<xsl:if test="position() = 1">firstRow:true,</xsl:if><xsl:if test="position() = last()">lastRow:true,</xsl:if>
 								<xsl:for-each select="./@*">
 									"<xsl:value-of select="name()"/>":<xsl:call-template name="jsValueText"><xsl:with-param name="rawValue" select="."/></xsl:call-template>
 									<xsl:if test="position() != last()">,</xsl:if>
