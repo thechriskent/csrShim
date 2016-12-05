@@ -14,6 +14,6 @@
 				ddwrt:ghost="show_all">
 				
 	<xsl:import href="/Style Library/csrShim/csrShim.xsl"/>
-	<xsl:variable name="BaseViewID" select="40"/>
-	<xsl:variable name="JSLink" select="'/intranet/Style Library/csrShim/jsLinkTest.js'"/>
+	<xsl:variable name="BaseViewID" select="50"/>
+	<xsl:variable name="JSLink" select="'/intranet/Style Library/csrShim/FeedDisplay.js'"/>
 </xsl:stylesheet>
