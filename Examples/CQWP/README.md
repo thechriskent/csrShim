@@ -18,4 +18,6 @@ By the end of the tutorial, you should know:
 - [EmptyStylesheet.xsl](../../csrShim/EmptyStyleSheet.xsl)
 
 ##Tutorial
-The tutorial is provided as a blog post here: COMING SOON
+The tutorial is provided as a blog post here:
+
+[Client Side Rendering (JSLink) with Content by Query Web Parts](https://thechriskent.com/2016/10/10/client-side-rendering-jslink-with-content-by-query-web-parts/)
