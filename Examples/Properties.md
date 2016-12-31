@@ -1,3 +1,8 @@
+#####Documentation:
+- [Parameters](Parameters.md): What you can pass to csrShim
+- [Properties](Properties.md): What csrShim gives you back 
+- [Extensibility](Extensibility.md): How to extend csrShim
+
 #Properties
 csrShim creates a ContextInfo (ctx) object and passes it off to the OOTB rendering engine. Some additional properties may be added during that process (like `Templates`).
 
