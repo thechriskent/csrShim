@@ -1,5 +1,5 @@
 # csrShim
-csrShim fills the gap of many of the limitations presented by **SharePoint** 2013, 2016, & Office 365's Out Of The Box (OOTB) **Client Side Rendering** (CSR).
+csrShim fills the gap of many of the limitations presented by **SharePoint** 2013, 2016, & Office 365's Out Of The Box (OOTB) **[Client Side Rendering](Examples/Standard CSR.md)** (CSR).
 
 csrShim is an XSLT solution that can be used to:
 - Enable JSLink CSR with Content by Query web parts
