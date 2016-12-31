@@ -1,6 +1,6 @@
 #Extending csrShim for Custom XML (JSLink)
 
-The sample code and the tutorial write-up demonstrate how to extended csrShim to use Client Side Rendering (CSR) with custom XML feeds.
+The sample code and the tutorial write-up demonstrate how to extend csrShim to use Client Side Rendering (CSR) with custom XML feeds.
 
 By the end of the tutorial, you should know:
 - How to create a simple XSL Wrapper
