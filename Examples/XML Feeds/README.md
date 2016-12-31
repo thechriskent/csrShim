@@ -18,4 +18,6 @@ By the end of the tutorial, you should know:
 - [csrShim.xsl](../../csrShim/csrShim.xsl)
 
 ##Tutorial
-The tutorial is provided as a blog post here: COMING SOON
+The tutorial is provided as a blog post here:
+
+[Client Side Rendering (JSLink) with RSS Feeds](https://thechriskent.com/2016/11/14/client-side-rendering-jslink-with-rss-feeds/)
