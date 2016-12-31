@@ -12,15 +12,23 @@ In most cases, you'll only need the csrShim.xsl stylesheet and you'll use it jus
 
 Just download csrShim.xsl, upload it to your SharePoint site *(The Style Library is a great spot)*, reference it in your webpart and specify the JSLink and BaseViewID parameters.
 
-For more details on how to use csrShim, there are several examples provided (along with detailed tutorials):
+For more details on how to use csrShim, there are several **examples** provided (along with detailed tutorials):
 - Targeted JSLink for List View Web Parts
 - Client Side Rendering (JSLink) with Content by Query Web Parts
 - Client Side Rendering (JSLink) with Feeds (RSS, Atom, Atom2, RDF)
 - Extending csrShim for Custom XML
 
-You can also consult the documentation for details around the following:
-- Parameters: What you can pass to csrShim
-- Properties: What csrShim gives you back 
+You can also consult the **documentation** for details around the following:
+- [Parameters](Examples/Parameters.md): What you can pass to csrShim
+- [Properties](Examples/Properties.md): What csrShim gives you back 
+
+For those new to CSR (or who'd like to brush up), there is a series of posts to serve as an introduction to using CSR (JSLink) with List View Web Parts including a detailed example of using the standard templates in a JSLink JavaScript file:
+
+1. [An Introduction to Client Side Rendering](https://thechriskent.com/2016/04/11/csr1-an-introduction-to-client-side-rendering/)
+2. [Benefits of Client Side Rendering](https://thechriskent.com/2016/05/16/csr2-benefits-of-client-side-rendering/)
+3. [Getting Started](https://thechriskent.com/2016/06/13/csr3-getting-started-list-view-csr/)
+4. [List View Extension Points](https://thechriskent.com/2016/07/11/csr4-list-view-extension-points-csr/)
+5. [Client Side Rendering Best Practices](https://thechriskent.com/2016/08/15/csr5-client-side-rendering-best-practices/)
 
 ##Background
 csrShim was originally developed to enable CSR with CQWPs but has since been expanded to be used with list views *(to solve the multiple list view per page issue)* and the XMLViewer with support for RSS, RDF, Atom, and Atom2 feeds.
