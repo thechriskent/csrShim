@@ -1,3 +1,8 @@
+#####Documentation:
+- [Parameters](Parameters.md): What you can pass to csrShim
+- [Properties](Properties.md): What csrShim gives you back 
+- [Extensibility](Extensibility.md): How to extend csrShim
+
 #Parameters
 csrShim takes advantage of several XSLT Parameters. CQWPs and XSLTListView web parts can use standard [ParameterBinding](https://msdn.microsoft.com/en-us/library/office/ff806155(v=office.14).aspx) elements to specify the values. XMLViewer does not support XSLT Parameters directly, so you must use an XSL Wrapper with `xsl:variable` elements.
 
