@@ -24,16 +24,16 @@ This is always true when using csrShim.
 These are the template functions as provided by the JS Link files. csrShim does not provide these. These are determined by the OOTB rendering engine as it pares templates up with ctx objects.
 
 ##IsDocLib
-This is the value of the IsDocLib parameter (defaults to false).
+This is the value of the [IsDocLib parameter](Parameters.md#isdoclib) (defaults to false).
 
 ##view
-This is the value of the View parameter (defaults to blank).
+This is the value of the [View parameter](Parameters.md#view) (defaults to blank).
 
 ##BaseViewID
-This is the value of the BaseViewID parameter (defaults to 1).
+This is the value of the [BaseViewID parameter](Parameters.md#baseviewid) (defaults to 1).
 
 ##ListTemplateType
-This is the value of the ListTemplateType parameter (defaults to 100).
+This is the value of the [ListTemplateType parameter](Parameters.md#listtemplatetype) (defaults to 100).
 
 #Data Properties
 The ctx object supports the `CurrentItem` property (when passed to the Item template) using the data pulled from the `Row` array on the `ListData` object.
@@ -63,7 +63,7 @@ Available when used with Lists (not feeds/XML). This is the item ID of the last 
 
 ##ListSchema
 ###IsDocLib
-This is the value of the IsDocLib parameter (defaults to false). However, this property is returned as a string. When true, the value will be `"true"`. When false, the value will be `""`. This follows the standard CSR conventions.
+This is the value of the [IsDocLib parameter](Parameters.md#isdoclib) (defaults to false). However, this property is returned as a string. When true, the value will be `"true"`. When false, the value will be `""`. This follows the standard CSR conventions.
 
 ###Field
 This is an array of the internal names of the fields. Field templates can target individual fields based on this information. This is a much more limited subset of information as provided by the standard CSR.
@@ -75,7 +75,7 @@ This is always true when using csrShim.
 This property can be helpful if you need to alter your rendering based on the values being provided by csrShim vs standard CSR.
 
 ##ShimType
-If provided, this is the value of the ShimType parameter. Otherwise, this value is automatically determined by csrShim as one of the following:
+If provided, this is the value of the [ShimType parameter](Parameters.md#shimtype). Otherwise, this value is automatically determined by csrShim as one of the following:
 - List
 - CQWP
 -	RSS
@@ -93,7 +93,7 @@ RootData contains extra properties from the data source as available:
   - BaseViewID (original)
   - RowLimit
   - TemplateType
-  - ViewwStyleID
+  - ViewStyleID
 - **CQWPs** – No additional information is provided
 - **RSS** – Extra properties from the channel element (depends on the feed)
 - **RDF** – Extra properties from the channel element (depends on the feed)
