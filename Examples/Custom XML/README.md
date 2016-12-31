@@ -15,4 +15,6 @@ By the end of the tutorial, you should know:
 - [csrShim.xsl](../../csrShim/csrShim.xsl)
 
 ##Tutorial
-The tutorial is provided as a blog post here: COMING SOON
+The tutorial is provided as a blog post here:
+
+[Extending csrShim for Custom XML (JSLink)](https://thechriskent.com/2016/12/19/extending-csrshim-for-custom-xml-jslink/)
