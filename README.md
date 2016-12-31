@@ -12,14 +12,16 @@ In most cases, you'll only need the csrShim.xsl stylesheet and you'll use it jus
 
 Just download csrShim.xsl, upload it to your SharePoint site *(The Style Library is a great spot)*, reference it in your webpart and specify the JSLink and BaseViewID parameters.
 
-For more details on how to use csrShim, there are several **examples** provided (along with detailed tutorials):
+####Examples
+For more details on how to use csrShim, there are several examples provided (along with detailed tutorials):
 - [Targeted JSLink for List View Web Parts](/Examples/Multiple List Views)
 - [Client Side Rendering (JSLink) with Content by Query Web Parts](/Examples/CQWP)
 - [Client Side Rendering (JSLink) with Feeds (RSS, Atom, Atom2, RDF)](/Examples/XML Feeds)
 - [Extending csrShim for Custom XML](/Examples/Custom XML)
 - [List View Client Side Rendering (JSLink) Primer](/Examples/CSR Primer) (No csrShim required!)
 
-You can also consult the **documentation** for details around the following:
+####Documentation
+You can also consult the documentation for details around the following:
 - [Parameters](Examples/Parameters.md): What you can pass to csrShim
 - [Properties](Examples/Properties.md): What csrShim gives you back 
 - [Extensibility](Examples/Extensibility.md): How to extend csrShim
