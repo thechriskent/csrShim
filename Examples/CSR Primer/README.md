@@ -1,4 +1,4 @@
-#List View Client Side Rendering (JSLink) Primer
+# List View Client Side Rendering (JSLink) Primer
 
 The sample code and the tutorial write-up demonstrate basic client side rendering for List View web parts using the JS Link property. csrShim is not used/required in this tutorial. The goal is to simply provide a brief overview, basic extension points, and a simple to follow example.
 
@@ -9,15 +9,15 @@ By the end of the tutorial, you should know:
 - Templates and Events available when using CSR
 - CSR Best Practices
 
-##Example Files
+## Example Files
 - [HallOfFame.js](HallOfFame.js) - A JSLink file to use in the tutorial
 - [HallOfFame.xml](HallOfFame.xml) - A [PnP provisioning template](https://github.com/SharePoint/PnP-Guidance/blob/master/articles/Introducing-the-PnP-Provisioning-Engine.md) that can be used to setup the list used in the tutorial (manual steps are provided, but this is a nice shortcut if you are familiar with PnP)
 - **README.md** - This file, wow!
 
-##Required csrShim Files
+## Required csrShim Files
 - None! This is just basic CSR (JSLink)
 
-##Tutorial
+## Tutorial
 The tutorial is provided as a series of blog posts:
 
 1. [An Introduction to Client Side Rendering](https://thechriskent.com/2016/04/11/csr1-an-introduction-to-client-side-rendering/)
