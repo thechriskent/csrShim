@@ -14,4 +14,4 @@ By the end of the tutorial, you should know:
 - [csrShim.xsl](../../csrShim/csrShim.xsl)
 
 ## Tutorial
-The tutorial is provided as a blog post here: COMING SOON
+The tutorial is provided as a blog post here: https://thechriskent.com/2017/01/09/targeted-jslink-for-list-view-web-parts/
