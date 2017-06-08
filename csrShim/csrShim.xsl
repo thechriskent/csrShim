@@ -23,6 +23,7 @@
 	<xsl:param name="ListTemplateType" select="100"/>
 	<xsl:param name="JSLink"/>
 	<xsl:param name="ShimType" select="' '"/>
+	<xsl:param name="UseTableLayoutFixed" select="true()"/>
 	
 	<xsl:param name="RawDump" select="false()"/>
 
@@ -234,6 +235,9 @@
 	
 	<xsl:template name="placeholders">
 		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+		<xsl:if test="$UseTableLayoutFixed">
+			<xsl:attribute name="style"><xsl:text>table-layout:fixed;</xsl:text></xsl:attribute>
+		</xsl:if>
 			<tbody>
 				<tr>
 					<td id="scriptCSRS"></td>
