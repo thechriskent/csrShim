@@ -165,3 +165,20 @@ This can be helpful in situations where you aren’t even using csrShim but just
 ```XML
 <xsl:variable name="RawDump" select="true()"/>
 ```
+&nbsp;
+
+## UseTableLayoutFixed
+###### Type: Boolean, Default: true
+When true, a `table-layout: fixed` style is applied to the wrapping table. This helps ensure that webpart widths are preserved as expected (preventing the table from overflowing). Set this to false to match the original table rendering.
+
+#### Example: CQWP or XSLTListView ParameterBinding
+```XML
+<ParameterBindings>
+    <ParameterBinding Name="UseTableLayoutFixed" Default="false"/>
+</ParameterBindings>
+```
+
+#### Example: XSL Wrapper
+```XML
+<xsl:variable name="UseTableLayoutFixed" select="false()"/>
+```
