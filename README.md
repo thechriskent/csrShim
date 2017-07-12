@@ -1,5 +1,5 @@
 # csrShim
-csrShim fills the gap of many of the limitations presented by **SharePoint** 2013, 2016, & Office 365's Out Of The Box (OOTB) **[Client Side Rendering](Examples/Standard CSR.md)** (CSR).
+csrShim fills the gap of many of the limitations presented by **SharePoint** 2013, 2016, & Office 365's Out Of The Box (OOTB) **[Client Side Rendering](Examples/Standard%20CSR.md)** (CSR).
 
 csrShim is an XSLT solution that can be used to:
 - Enable JSLink CSR with Content by Query web parts
@@ -14,11 +14,11 @@ Just download csrShim.xsl, upload it to your SharePoint site *(The Style Library
 
 #### Examples
 For more details on how to use csrShim, there are several examples provided (along with detailed tutorials):
-- [Targeted JSLink for List View Web Parts](/Examples/Multiple List Views)
+- [Targeted JSLink for List View Web Parts](/Examples/Multiple%20List%20Views)
 - [Client Side Rendering (JSLink) with Content by Query Web Parts](/Examples/CQWP)
-- [Client Side Rendering (JSLink) with Feeds (RSS, Atom, Atom2, RDF)](/Examples/XML Feeds)
-- [Extending csrShim for Custom XML](/Examples/Custom XML)
-- [List View Client Side Rendering (JSLink) Primer](/Examples/CSR Primer) (No csrShim required!)
+- [Client Side Rendering (JSLink) with Feeds (RSS, Atom, Atom2, RDF)](/Examples/XML%20Feeds)
+- [Extending csrShim for Custom XML](/Examples/Custom%20XML)
+- [List View Client Side Rendering (JSLink) Primer](/Examples/CSR%20Primer) (No csrShim required!)
 
 #### Documentation
 You can also consult the documentation for details around the following:
